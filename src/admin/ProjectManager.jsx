@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, addDoc, getDocs, deleteDoc, doc, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
-import PortfolioManagement from "./PortfolioManagement"; // Import the editor we made
+// Removed 'getDocs' from the line below as it was unused
+import { collection, addDoc, deleteDoc, doc, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
+import PortfolioManagement from "./PortfolioManagement"; 
 import { HiOutlineTrash, HiOutlinePencilAlt, HiOutlinePlus } from "react-icons/hi";
 
 const ProjectManager = () => {
@@ -17,7 +18,7 @@ const ProjectManager = () => {
     description: '' 
   });
 
-  // 1. Fetch Projects in Real-time
+  // 1. Fetch Projects in Real-time using onSnapshot
   useEffect(() => {
     const q = query(collection(db, "projects"), orderBy("lastUpdated", "desc"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -34,8 +35,8 @@ const ProjectManager = () => {
     try {
       await addDoc(collection(db, "projects"), {
         ...formData,
-        brochurePages: [], // Initialize empty
-        customDetails: [],  // Initialize empty
+        brochurePages: [], 
+        customDetails: [],  
         lastUpdated: serverTimestamp()
       });
       
@@ -49,7 +50,11 @@ const ProjectManager = () => {
   // 3. Delete Project
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
-      await deleteDoc(doc(db, "projects", id));
+      try {
+        await deleteDoc(doc(db, "projects", id));
+      } catch (e) {
+        alert("Error deleting: " + e.message);
+      }
     }
   };
 
@@ -79,7 +84,7 @@ const ProjectManager = () => {
             <label className="text-xs font-bold text-gray-400 uppercase ml-1">Location</label>
             <input 
               type="text" 
-              placeholder="e.g. New York, USA" 
+              placeholder="e.g. Whitefield, Bangalore" 
               className="p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
               value={formData.location}
               onChange={(e) => setFormData({...formData, location: e.target.value})}
@@ -90,7 +95,7 @@ const ProjectManager = () => {
             <label className="text-xs font-bold text-gray-400 uppercase ml-1">Starting Price</label>
             <input 
               type="text" 
-              placeholder="e.g. $250,000" 
+              placeholder="e.g. ₹85 Lakhs" 
               className="p-3 border rounded-xl outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"
               value={formData.price}
               onChange={(e) => setFormData({...formData, price: e.target.value})}

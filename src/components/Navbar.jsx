@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { FaPhoneAlt } from 'react-icons/fa';
+// Removed FaPhoneAlt from the line below as it was unused
 import { HiUser, HiMenuAlt3, HiOutlineX } from 'react-icons/hi';
-import logo from '../logo.png'; // Path to your logo in src/logo.png
+import logo from '../logo.png'; 
 
 const Navbar = ({ onAdminClick }) => { 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -69,9 +69,9 @@ const Navbar = ({ onAdminClick }) => {
       <div className={`fixed inset-0 bg-[#0a1630] flex flex-col items-center justify-center space-y-8 transition-all duration-500 z-[90] ${
         isMobileMenuOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
       }`}>
-        <li onClick={() => scrollToSection('home')} className="list-none text-2xl font-bold text-white uppercase">Home</li>
-        <li onClick={() => scrollToSection('projects')} className="list-none text-2xl font-bold text-white uppercase">Projects</li>
-        <li onClick={() => onAdminClick()} className="list-none text-2xl font-bold text-blue-400 uppercase border-b-2 border-blue-400">Admin Login</li>
+        <li onClick={() => scrollToSection('home')} className="list-none text-2xl font-bold text-white uppercase cursor-pointer">Home</li>
+        <li onClick={() => scrollToSection('projects')} className="list-none text-2xl font-bold text-white uppercase cursor-pointer">Projects</li>
+        <li onClick={() => onAdminClick()} className="list-none text-2xl font-bold text-blue-400 uppercase border-b-2 border-blue-400 cursor-pointer">Admin Login</li>
         <button onClick={() => setIsMobileMenuOpen(false)} className="mt-10 text-white/30 underline">Close Menu</button>
       </div>
 

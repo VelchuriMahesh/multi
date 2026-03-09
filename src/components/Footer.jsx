@@ -5,10 +5,10 @@ import {
   FaWhatsapp, 
   FaPhoneAlt, 
   FaRegEnvelope, 
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt removed here as it was unused
   FaUserAlt
 } from 'react-icons/fa';
-import logo from '../logo.png'; // Ensure your logo is in src/logo.png
+import logo from '../logo.png'; 
 
 const Footer = () => {
   return (
@@ -87,38 +87,35 @@ const Footer = () => {
             © 2026 MULTIVERSAL INFRA PVT. LTD. ALL RIGHTS RESERVED.
           </p>
 
-         {/* ADVANCED ACTION PILL - HIGH CONTRAST VERSION */}
-<div className="flex items-center bg-white rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-200 scale-90 md:scale-100">
-  
-  {/* Main Action Button */}
-  <button 
-    onClick={() => window.location.href = 'mailto:multiversalinfra@gmail.com'}
-    className="bg-[#111827] text-white flex items-center gap-3 px-6 py-3.5 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all duration-300 whitespace-nowrap"
-  >
-    <FaRegEnvelope className="text-sm" /> 
-    Schedule Visit
-  </button>
+          {/* ADVANCED ACTION PILL - HIGH CONTRAST VERSION */}
+          <div className="flex items-center bg-white rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-200 scale-90 md:scale-100">
+            {/* Main Action Button */}
+            <button 
+              onClick={() => window.location.href = 'mailto:multiversalinfra@gmail.com'}
+              className="bg-[#111827] text-white flex items-center gap-3 px-6 py-3.5 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all duration-300 whitespace-nowrap"
+            >
+              <FaRegEnvelope className="text-sm" /> 
+              Schedule Visit
+            </button>
 
-  {/* Icon Section (Phone & WhatsApp) */}
-  <div className="flex items-center px-5 gap-5 border-l border-gray-200 ml-2">
-      
-      {/* Phone Icon */}
-      <a href="tel:+919945196777" className="group">
-        <FaPhoneAlt 
-          className="text-gray-400 group-hover:text-black transition-colors" 
-          style={{ width: '16px', height: '16px', display: 'block' }} 
-        />
-      </a>
+            {/* Icon Section (Phone & WhatsApp) */}
+            <div className="flex items-center px-5 gap-5 border-l border-gray-200 ml-2">
+                <a href="tel:+919945196777" className="group">
+                  <FaPhoneAlt 
+                    className="text-gray-400 group-hover:text-black transition-colors" 
+                    style={{ width: '16px', height: '16px', display: 'block' }} 
+                  />
+                </a>
 
-      {/* WhatsApp Icon */}
-      <a href="https://wa.me/919945196777" target="_blank" rel="noreferrer" className="group">
-        <FaWhatsapp 
-          className="text-[#25D366] group-hover:scale-125 transition-transform" 
-          style={{ width: '22px', height: '22px', display: 'block' }} 
-        />
-      </a>
-  </div>
-</div>
+                <a href="https://wa.me/919945196777" target="_blank" rel="noreferrer" className="group">
+                  <FaWhatsapp 
+                    className="text-[#25D366] group-hover:scale-125 transition-transform" 
+                    style={{ width: '22px', height: '22px', display: 'block' }} 
+                  />
+                </a>
+            </div>
+          </div>
+
           {/* Legal Links */}
           <div className="flex items-center gap-6 text-[10px] uppercase tracking-widest font-bold">
             <div className="flex items-center gap-2 hover:text-white cursor-pointer">
