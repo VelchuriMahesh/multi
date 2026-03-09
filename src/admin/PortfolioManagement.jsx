@@ -7,7 +7,8 @@ import {
   HiOutlineChevronUp,
   HiOutlineChevronDown,
   HiOutlineTrash,
-  HiOutlinePlus
+  HiOutlinePlus,
+  HiOutlineCloudUpload
 } from "react-icons/hi";
 
 const API_KEY = "eb7f44e738dc1e9664d6349c85c8772d";
@@ -15,8 +16,6 @@ const API_KEY = "eb7f44e738dc1e9664d6349c85c8772d";
 const PortfolioManagement = ({ projectId, onClose }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [brochurePages, setBrochurePages] = useState([]);
-  
-  // New state for dynamic details (e.g., Area: 1200sqft, BHK: 3)
   const [customDetails, setCustomDetails] = useState([]);
 
   const [formData, setFormData] = useState({
@@ -27,7 +26,6 @@ const PortfolioManagement = ({ projectId, onClose }) => {
     description: ""
   });
 
-  /* ---------------- FETCH PROJECT FROM FIREBASE ---------------- */
   useEffect(() => {
     const fetchProject = async () => {
       if (!projectId) return;
@@ -45,10 +43,7 @@ const PortfolioManagement = ({ projectId, onClose }) => {
             description: data.description || ""
           });
 
-          // Load custom details if they exist
-          if (data.customDetails) {
-            setCustomDetails(data.customDetails);
-          }
+          if (data.customDetails) setCustomDetails(data.customDetails);
 
           if (data.brochurePages && Array.isArray(data.brochurePages)) {
             setBrochurePages(
@@ -68,29 +63,18 @@ const PortfolioManagement = ({ projectId, onClose }) => {
     fetchProject();
   }, [projectId]);
 
-  /* ---------------- DYNAMIC DETAILS HANDLERS ---------------- */
-  const addDetailRow = () => {
-    setCustomDetails([...customDetails, { label: "", value: "" }]);
-  };
-
+  const addDetailRow = () => setCustomDetails([...customDetails, { label: "", value: "" }]);
+  
   const updateDetailRow = (index, field, val) => {
     const updated = [...customDetails];
     updated[index][field] = val;
     setCustomDetails(updated);
   };
 
-  const removeDetailRow = (index) => {
-    setCustomDetails(customDetails.filter((_, i) => i !== index));
-  };
+  const removeDetailRow = (index) => setCustomDetails(customDetails.filter((_, i) => i !== index));
 
-  /* ---------------- HANDLE INPUT CHANGES ---------------- */
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const clearPrice = () => setFormData({ ...formData, price: "" });
-
-  /* ---------------- FILE UPLOAD PREVIEW ---------------- */
   const handleFileUpload = (e) => {
     const files = Array.from(e.target.files);
     const newPages = files.map((file) => ({
@@ -111,204 +95,180 @@ const PortfolioManagement = ({ projectId, onClose }) => {
     setBrochurePages(pages);
   };
 
-  /* ---------------- UPLOAD TO IMGBB ---------------- */
   const uploadToImgBB = async (file) => {
     const body = new FormData();
     body.append("image", file);
     try {
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {
-        method: "POST",
-        body
-      });
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body });
       const data = await res.json();
       return data.success ? data.data.display_url : null;
-    } catch (err) {
-      return null;
-    }
+    } catch (err) { return null; }
   };
 
-  /* ---------------- SAVE TO FIREBASE ---------------- */
   const handleSavePortfolio = async () => {
     if (!formData.name) return alert("Project Name is required");
     setIsSaving(true);
-
     try {
       const finalUrls = [];
       for (const page of brochurePages) {
         if (page.isNew && page.file) {
           const uploadedUrl = await uploadToImgBB(page.file);
           if (uploadedUrl) finalUrls.push(uploadedUrl);
-        } else {
-          finalUrls.push(page.url);
-        }
+        } else { finalUrls.push(page.url); }
       }
-
       const projectRef = doc(db, "projects", projectId);
       await updateDoc(projectRef, {
         ...formData,
-        customDetails: customDetails, // Saving the new list of details
+        customDetails,
         brochurePages: finalUrls,
         lastUpdated: serverTimestamp()
       });
-
-      alert("Project details updated!");
+      alert("Project updated!");
       onClose();
-    } catch (error) {
-      alert("Save failed.");
-    } finally {
-      setIsSaving(false);
-    }
+    } catch (error) { alert("Save failed."); } finally { setIsSaving(false); }
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 overflow-y-auto p-4 md:p-10">
-      <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-        
-        {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b bg-gray-50">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Project Portfolio</h2>
-            <p className="text-sm text-gray-500">Project ID: {projectId}</p>
-          </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-full">
-            <HiOutlineX size={24} />
-          </button>
-        </div>
-
-        <div className="p-8 space-y-10">
+    <div className="fixed inset-0 bg-[#0a1630]/90 backdrop-blur-md z-[150] overflow-y-auto">
+      {/* Container: Full width on mobile, max-width on desktop */}
+      <div className="min-h-screen md:p-6 lg:p-12 flex items-center justify-center">
+        <div className="w-full max-w-5xl bg-white md:rounded-[2.5rem] shadow-2xl overflow-hidden relative">
           
-          {/* Section 1: Basic Information */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-bold border-l-4 border-blue-600 pl-3">Basic Information</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Input label="Project Name" name="name" value={formData.name} onChange={handleChange} />
-              <Input label="Location" name="location" value={formData.location} onChange={handleChange} />
-              
-              <div className="relative">
-                <Input label="Price Range" name="price" value={formData.price} onChange={handleChange} />
-                {formData.price && (
-                  <button 
-                    onClick={clearPrice}
-                    className="absolute right-3 top-9 text-xs text-red-500 hover:underline"
-                  >
-                    Clear
-                  </button>
-                )}
-              </div>
-
-              <div className="flex flex-col">
-                <label className="text-xs font-bold mb-2 uppercase text-gray-500">Current Status</label>
-                <select 
-                  name="status" 
-                  value={formData.status} 
-                  onChange={handleChange}
-                  className="border p-3 rounded-xl bg-white outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="Ongoing">Ongoing</option>
-                  <option value="Completed">Completed</option>
-                  <option value="Upcoming">Upcoming</option>
-                </select>
-              </div>
+          {/* STICKY HEADER FOR MOBILE */}
+          <div className="sticky top-0 z-20 flex justify-between items-center p-5 md:p-8 border-b bg-white/80 backdrop-blur-md">
+            <div>
+              <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">Edit Portfolio</h2>
+              <p className="text-[10px] uppercase tracking-widest text-blue-600 font-bold">ID: {projectId.slice(0,8)}...</p>
             </div>
-          </div>
-
-          {/* Section 2: Dynamic Project Details (THE NEW PART) */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-bold border-l-4 border-blue-600 pl-3">Specifications / Details</h3>
-              <button 
-                onClick={addDetailRow}
-                className="flex items-center gap-2 text-sm bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors"
-              >
-                <HiOutlinePlus /> Add Detail
-              </button>
-            </div>
-            
-            <div className="space-y-3">
-              {customDetails.map((detail, index) => (
-                <div key={index} className="flex gap-4 items-center bg-gray-50 p-3 rounded-xl animate-in fade-in duration-300">
-                  <input 
-                    placeholder="Label (e.g. Area)" 
-                    value={detail.label}
-                    onChange={(e) => updateDetailRow(index, 'label', e.target.value)}
-                    className="flex-1 border p-2 rounded-lg outline-none focus:bg-white"
-                  />
-                  <input 
-                    placeholder="Value (e.g. 1500 Sqft)" 
-                    value={detail.value}
-                    onChange={(e) => updateDetailRow(index, 'value', e.target.value)}
-                    className="flex-1 border p-2 rounded-lg outline-none focus:bg-white"
-                  />
-                  <button onClick={() => removeDetailRow(index)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg">
-                    <HiOutlineTrash size={20} />
-                  </button>
-                </div>
-              ))}
-              {customDetails.length === 0 && <p className="text-sm text-gray-400 italic">No custom details added yet.</p>}
-            </div>
-          </div>
-
-          {/* Section 3: Description */}
-          <div className="flex flex-col space-y-2">
-            <label className="text-xs font-bold uppercase text-gray-500">Project Description</label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              className="w-full border p-4 rounded-xl h-32 outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Write about the project amenities, distance from city, etc..."
-            />
-          </div>
-
-          {/* Section 4: Images */}
-          <div className="space-y-4">
-            <div className="flex justify-between items-end">
-              <h3 className="text-lg font-bold border-l-4 border-blue-600 pl-3">Brochure & Gallery</h3>
-              <label className="bg-black hover:bg-gray-800 text-white px-6 py-2.5 rounded-xl cursor-pointer transition-all shadow-lg">
-                Upload Images
-                <input type="file" hidden multiple accept="image/*" onChange={handleFileUpload} />
-              </label>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 bg-gray-50 p-4 rounded-2xl border-2 border-dashed border-gray-200">
-              {brochurePages.map((page, index) => (
-                <div key={page.id} className="relative group bg-white p-2 rounded-xl shadow-sm border border-gray-100">
-                  <img src={page.url} alt="preview" className="h-32 w-full object-cover rounded-lg" />
-                  <div className="flex justify-between items-center mt-2">
-                    <div className="flex gap-1">
-                      <button onClick={() => movePage(index, "up")} disabled={index === 0} className="p-1 hover:bg-gray-100 rounded disabled:opacity-10"><HiOutlineChevronUp/></button>
-                      <button onClick={() => movePage(index, "down")} disabled={index === brochurePages.length - 1} className="p-1 hover:bg-gray-100 rounded disabled:opacity-10"><HiOutlineChevronDown/></button>
-                    </div>
-                    <button onClick={() => setBrochurePages(brochurePages.filter((_, i) => i !== index))} className="text-red-500 p-1 hover:bg-red-50 rounded"><HiOutlineTrash/></button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer Save */}
-          <div className="flex justify-end pt-6 border-t">
-            <button
-              onClick={handleSavePortfolio}
-              disabled={isSaving}
-              className={`px-12 py-4 rounded-2xl font-bold text-white transition-all shadow-xl ${
-                isSaving ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 active:scale-95"
-              }`}
-            >
-              {isSaving ? "Uploading Data..." : "Save Project Portfolio"}
+            <button onClick={onClose} className="p-3 bg-gray-100 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all">
+              <HiOutlineX size={24} />
             </button>
           </div>
 
+          <div className="p-6 md:p-10 space-y-12">
+            
+            {/* SECTION 1: BASIC INFO */}
+            <div className="space-y-6">
+              <SectionTitle title="Core Specifications" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <Input label="Project Name" name="name" value={formData.name} onChange={handleChange} />
+                <Input label="Location" name="location" value={formData.location} onChange={handleChange} />
+                <Input label="Price Display" name="price" value={formData.price} onChange={handleChange} placeholder="e.g. Starting ₹85L" />
+                
+                <div className="flex flex-col">
+                  <label className="text-[10px] font-black mb-2 uppercase text-gray-400 tracking-widest ml-1">Current Status</label>
+                  <select 
+                    name="status" 
+                    value={formData.status} 
+                    onChange={handleChange}
+                    className="border border-gray-100 p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-sm"
+                  >
+                    <option value="Ongoing">Ongoing</option>
+                    <option value="Completed">Completed</option>
+                    <option value="Upcoming">Upcoming</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 2: DYNAMIC DETAILS (IMPROVED FOR MOBILE) */}
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <SectionTitle title="Technical Details" />
+                <button onClick={addDetailRow} className="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100"><HiOutlinePlus size={20}/></button>
+              </div>
+              
+              <div className="space-y-3">
+                {customDetails.map((detail, index) => (
+                  <div key={index} className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_auto] gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-100">
+                    <input 
+                      placeholder="Label (e.g. BHK)" 
+                      value={detail.label}
+                      onChange={(e) => updateDetailRow(index, 'label', e.target.value)}
+                      className="w-full border-none bg-white p-3 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input 
+                      placeholder="Value (e.g. 3 BHK)" 
+                      value={detail.value}
+                      onChange={(e) => updateDetailRow(index, 'value', e.target.value)}
+                      className="w-full border-none bg-white p-3 rounded-xl text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <button onClick={() => removeDetailRow(index)} className="flex items-center justify-center bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-100">
+                      <HiOutlineTrash size={20} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* SECTION 3: DESCRIPTION */}
+            <div className="space-y-6">
+               <SectionTitle title="About Project" />
+               <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                className="w-full border border-gray-100 p-5 rounded-[2rem] bg-gray-50 h-40 outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-all"
+                placeholder="Describe the luxury, amenities, and connectivity..."
+              />
+            </div>
+
+            {/* SECTION 4: IMAGES */}
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <SectionTitle title="Brochure Gallery" />
+                <label className="w-full sm:w-auto flex items-center justify-center gap-2 bg-[#0a1630] text-white px-6 py-4 rounded-2xl cursor-pointer hover:bg-blue-600 transition-all shadow-lg text-sm font-bold">
+                  <HiOutlineCloudUpload size={20} />
+                  Upload Images
+                  <input type="file" hidden multiple accept="image/*" onChange={handleFileUpload} />
+                </label>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                {brochurePages.map((page, index) => (
+                  <div key={page.id} className="relative group bg-gray-50 p-2 rounded-2xl border border-gray-100">
+                    <img src={page.url} alt="preview" className="h-32 md:h-40 w-full object-cover rounded-xl" />
+                    <div className="flex justify-between items-center mt-2 px-1">
+                      <div className="flex gap-1">
+                        <button onClick={() => movePage(index, "up")} disabled={index === 0} className="p-2 bg-white rounded-lg disabled:opacity-30"><HiOutlineChevronUp size={14}/></button>
+                        <button onClick={() => movePage(index, "down")} disabled={index === brochurePages.length - 1} className="p-2 bg-white rounded-lg disabled:opacity-30"><HiOutlineChevronDown size={14}/></button>
+                      </div>
+                      <button onClick={() => setBrochurePages(brochurePages.filter((_, i) => i !== index))} className="p-2 bg-red-50 text-red-500 rounded-lg"><HiOutlineTrash size={14}/></button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* FOOTER ACTIONS */}
+            <div className="pt-10 border-t flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={handleSavePortfolio}
+                disabled={isSaving}
+                className={`flex-1 py-5 rounded-[2rem] font-black uppercase tracking-widest text-xs transition-all shadow-xl ${
+                  isSaving ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700 active:scale-95 shadow-blue-200"
+                }`}
+              >
+                {isSaving ? "Synchronizing Data..." : "Apply All Changes"}
+              </button>
+              <button onClick={onClose} className="sm:hidden py-4 text-gray-400 font-bold text-sm">Cancel</button>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
+const SectionTitle = ({ title }) => (
+  <h3 className="text-sm font-black uppercase tracking-[0.2em] text-slate-800 border-l-4 border-blue-600 pl-4">{title}</h3>
+);
+
 const Input = ({ label, ...props }) => (
   <div className="flex flex-col">
-    <label className="text-xs font-bold mb-2 uppercase text-gray-500">{label}</label>
-    <input className="border p-3 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition-all" {...props} />
+    <label className="text-[10px] font-black mb-2 uppercase text-gray-400 tracking-widest ml-1">{label}</label>
+    <input className="border border-gray-100 p-4 rounded-2xl bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 transition-all font-medium text-sm" {...props} />
   </div>
 );
 
