@@ -5,7 +5,6 @@ import {
   FaWhatsapp, 
   FaPhoneAlt, 
   FaRegEnvelope, 
-  // FaMapMarkerAlt removed here as it was unused
   FaUserAlt
 } from 'react-icons/fa';
 import logo from '../logo.png'; 
