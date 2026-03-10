@@ -3,7 +3,7 @@ import {
   HiOutlinePhone, 
   HiOutlineTrash, 
   HiOutlineCalendar, 
-  HiOutlineUser, 
+  // HiOutlineUser removed to fix the warning
   HiOutlineChatAlt2,
   HiOutlineMail
 } from 'react-icons/hi';
@@ -34,7 +34,7 @@ const EnquiryManager = () => {
         </div>
       </div>
 
-      {/* --- DESKTOP TABLE VIEW (Hidden on Mobile) --- */}
+      {/* --- DESKTOP TABLE VIEW --- */}
       <div className="hidden md:block bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
@@ -78,12 +78,11 @@ const EnquiryManager = () => {
         </table>
       </div>
 
-      {/* --- MOBILE CARD VIEW (Hidden on Desktop) --- */}
+      {/* --- MOBILE CARD VIEW --- */}
       <div className="md:hidden space-y-4">
         {enquiries.map((enq) => (
           <div key={enq.id} className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm space-y-4">
             
-            {/* Card Top: Name & Status */}
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-100">
@@ -103,13 +102,11 @@ const EnquiryManager = () => {
               </span>
             </div>
 
-            {/* Interest Detail */}
             <div className="bg-gray-50 p-4 rounded-2xl">
                 <p className="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">Interested In</p>
                 <p className="text-sm font-bold text-slate-700">{enq.interest}</p>
             </div>
 
-            {/* Quick Mobile Actions */}
             <div className="grid grid-cols-3 gap-3">
               <a 
                 href={`tel:${enq.contact}`} 
