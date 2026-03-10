@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { 
-  ShieldCheck, Leaf, Clock, ShoppingCart, Target, 
-  Gem, Award, Users, MapPin, Building2, ChevronRight,
+  ShieldCheck, Leaf, Clock, ShoppingCart, Target,MapPin, Building2, ChevronRight,
   Quote, Phone, Mail, Globe
 } from 'lucide-react';
 
