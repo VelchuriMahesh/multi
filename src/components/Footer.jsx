@@ -84,7 +84,7 @@ const Footer = () => {
           
           {/* Copyright */}
           <p className="text-[10px] uppercase tracking-widest text-gray-600">
-            © 2026 MULTIVERSAL INFRA PVT. LTD. ALL RIGHTS RESERVED.
+            © 2015 MULTIVERSAL INFRA PVT. LTD. ALL RIGHTS RESERVED.
           </p>
 
           {/* ADVANCED ACTION PILL - HIGH CONTRAST VERSION */}

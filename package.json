@@ -10,7 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.16",
     "firebase": "^12.10.0",
-    "framer-motion": "^12.34.3",
+    "framer-motion": "^12.35.2",
     "lucide-react": "^0.563.0",
     "postcss": "^8.4.31",
     "qrcode.react": "^4.2.0",

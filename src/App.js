@@ -11,29 +11,38 @@ import FeaturedProjects from './components/FeaturedProjects';
 import Footer from './components/Footer';
 import FloatingBar from './components/FloatingBar';
 import AskAIButton from './components/AskAIButton';
+import AboutPage from './components/AboutPage';
+import SalesPage from './components/SalesPage';
+
+
+// --- NEW FRESH PAGE ---
+
 
 // --- ADMIN COMPONENTS ---
 import AdminDashboard from './admin/AdminDashboard';
 import Login from './admin/Login';
 
-// --- STYLES ---
 import './App.css';
 
 const App = () => {
   const [isAdminView, setIsAdminView] = useState(false);
+  const [isAboutView, setIsAboutView] = useState(false); 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 1. Listen for Firebase Authentication changes (Tracks if Admin is logged in)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser); // If logged in, 'user' becomes the admin object
+      setUser(currentUser);
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  // 2. Loading screen to prevent flicker
+  // Force scroll to top when switching pages
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [isAboutView, isAdminView]);
+
   if (loading) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-[#0a1630]">
@@ -42,13 +51,7 @@ const App = () => {
     );
   }
 
-  // --- 3. ADMIN GATEKEEPER LOGIC ---
   if (isAdminView) {
-    /* 
-       When you click the Admin button in the Navbar, this part activates.
-       If NOT logged in (user is null) -> Show Login.jsx
-       If LOGGED in (user is active) -> Show AdminDashboard.jsx
-    */
     return user ? (
       <AdminDashboard setIsAdmin={setIsAdminView} />
     ) : (
@@ -56,36 +59,43 @@ const App = () => {
     );
   }
 
-  // --- 4. PUBLIC WEBSITE VIEW ---
   return (
     <div className="relative w-full bg-white selection:bg-blue-100 selection:text-blue-900">
       
-      {/* Passing 'onAdminClick' switches isAdminView to true */}
-      <Navbar onAdminClick={() => setIsAdminView(true)} />
+      <Navbar 
+        onAdminClick={() => setIsAdminView(true)} 
+        onAboutClick={() => setIsAboutView(true)}
+        onHomeClick={() => setIsAboutView(false)}
+      />
 
-      {/* IDs allow the Navbar buttons to scroll to these exact locations */}
-      <section id="home">
-        <HeroSection />
-      </section>
+      {isAboutView ? (
+        <AboutPage />
+      ) : (
+        <>
+          <section id="home">
+            <HeroSection />
+          </section>
 
-      <section id="about">
-        <AboutSection />
-        <Milestones />
-      </section>
+          <section id="about">
+            <AboutSection />
+            <Milestones />
+          </section>
 
-      <section id="projects">
-        <FeaturedProjects />
-      </section>
+          <section id="projects">
+            <FeaturedProjects />
+          </section>
 
-      <section id="contact">
-        <Footer />
-      </section>
+          <SalesPage/>
 
-      {/* Floating UI Elements */}
+          <section id="contact">
+            <Footer />
+          </section>
+        </>
+      )}
+
       <FloatingBar />
       <AskAIButton />
 
-      {/* Secret Admin Button at bottom-left for quick testing */}
       <button 
         onClick={() => setIsAdminView(true)}
         className="fixed bottom-4 left-4 z-[50] opacity-0 hover:opacity-100 bg-black/20 text-[10px] p-1 text-white rounded transition-all"
