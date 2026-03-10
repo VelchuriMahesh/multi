@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, deleteDoc, doc, serverTimestamp, onSnapshot, query, orderBy } from "firebase/firestore";
 import PortfolioManagement from "./PortfolioManagement"; 
-import { HiOutlineTrash, HiOutlinePencilAlt, HiOutlinePlus, HiLocationMarker, HiTag } from "react-icons/hi";
+// Removed HiTag from the line below to fix the warning
+import { HiOutlineTrash, HiOutlinePencilAlt, HiOutlinePlus, HiLocationMarker } from "react-icons/hi";
 
 const ProjectManager = () => {
   const [projects, setProjects] = useState([]);
@@ -138,7 +139,7 @@ const ProjectManager = () => {
             <h3 className="text-xl font-bold text-slate-800">Existing Projects</h3>
         </div>
 
-        {/* Desktop Table - Hidden on Mobile */}
+        {/* Desktop Table */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead className="bg-gray-50/50 text-gray-500 uppercase text-[10px] font-black tracking-widest">
@@ -184,7 +185,7 @@ const ProjectManager = () => {
           </table>
         </div>
 
-        {/* Mobile List View - Hidden on Desktop */}
+        {/* Mobile List View */}
         <div className="md:hidden divide-y divide-gray-50">
           {projects.map((proj) => (
             <div key={proj.id} className="p-6 space-y-4">
@@ -227,7 +228,6 @@ const ProjectManager = () => {
         )}
       </div>
 
-      {/* --- THE MODAL --- */}
       {isModalOpen && (
         <PortfolioManagement 
           projectId={selectedProjectId} 

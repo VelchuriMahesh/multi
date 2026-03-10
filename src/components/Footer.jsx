@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa';
 import logo from '../logo.png'; 
 
+
 const Footer = () => {
   return (
     <footer className="bg-[#050a14] text-gray-400 py-16 px-6 md:px-20 font-sans">

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HiUser, HiMenuAlt3, HiOutlineX } from 'react-icons/hi';
 import logo from '../logo.png'; 
 
+
 const Navbar = ({ onAdminClick, onAboutClick, onHomeClick }) => { 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
