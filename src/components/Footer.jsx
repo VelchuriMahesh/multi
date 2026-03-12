@@ -1,141 +1,134 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { 
   FaFacebookF, 
   FaInstagram, 
-  FaWhatsapp, 
-  FaPhoneAlt, 
   FaRegEnvelope, 
-  FaUserAlt
+  FaUserAlt,
+  FaWhatsapp,
+  FaArrowRight
 } from 'react-icons/fa';
 import logo from '../logo.png'; 
 
-
 const Footer = () => {
+  const whatsappNumber = "919945196777";
+  const message = "Hello Multiversal Infra, I would like to inquire about your projects.";
+
+  const handleWhatsApp = () => {
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
   return (
-    <footer className="bg-[#050a14] text-gray-400 py-16 px-6 md:px-20 font-sans">
-      <div className="max-w-7xl mx-auto">
+    <footer className="relative bg-[#02040a] text-white py-10 px-6 md:px-16 overflow-hidden border-t border-white/10 font-sans">
+      
+      {/* 1. BRIGHTNESS ENGINE (High-Intensity Blue Glow) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[100px] bg-blue-600/20 blur-[100px] rounded-full pointer-events-none" />
+      
+      {/* 2. ADVANCED HUD SCANNER (Laser Line) */}
+      <div className="absolute top-0 left-0 w-full h-[1px] overflow-hidden opacity-50">
+        <motion.div 
+          animate={{ x: ['-100%', '200%'] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
+          className="w-1/3 h-full bg-gradient-to-r from-transparent via-blue-400 to-transparent"
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-20">
         
-        {/* TOP SECTION: 4 COLUMNS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        {/* TOP ROW: COMPACT DASHBOARD */}
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 border-b border-white/5 pb-10">
           
-          {/* Column 1: Logo & Description */}
-          <div className="space-y-6">
-            <img src={logo} alt="MVIPL Logo" className="h-16 w-auto" />
-            <p className="text-sm leading-relaxed text-gray-500">
-              Multiversal Infra Private Limited (MVIPL) envisions at developing a 
-              real estate firm that builds High Quality Living Spaces with On-time 
-              Delivery and Customer Satisfaction as the key driving factors.
+          {/* Brand Signature */}
+          <div className="flex flex-col items-center lg:items-start gap-4">
+            <motion.img 
+              whileHover={{ scale: 1.05, rotate: -1 }}
+              src={logo} alt="MVIPL" className="h-9 w-auto brightness-125" 
+            />
+            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-blue-500/60">
+              Architecting Bangalore • Est. 2015
             </p>
-            <div className="flex space-x-4">
-              <SocialIcon icon={<FaFacebookF size={14} />} />
-              <SocialIcon icon={<FaInstagram size={14} />} />
-              <SocialIcon icon={<FaWhatsapp size={14} />} />
+          </div>
+
+          {/* Technical Contact HUD */}
+          <div className="flex flex-wrap justify-center gap-6 md:gap-14">
+            <div className="flex flex-col gap-1">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500">Secure Line</span>
+              <a href="tel:+919945196777" className="text-lg font-black tracking-tighter text-white hover:text-blue-400 transition-colors">
+                +91 99451 96777
+              </a>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500 flex items-center gap-2">
+                <FaRegEnvelope size={10} className="text-blue-500" /> Digital Hub
+              </span>
+              <a href="mailto:multiversalinfra@gmail.com" className="text-xs font-bold text-gray-400 hover:text-white transition-colors">
+                multiversalinfra@gmail.com
+              </a>
+            </div>
+
+            <div className="hidden sm:flex flex-col gap-1 border-l border-white/10 pl-8">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-gray-500">Global HQ</span>
+              <p className="text-[10px] font-medium text-gray-400 uppercase tracking-tighter">
+                Whitefield, Bangalore
+              </p>
             </div>
           </div>
 
-          {/* Column 2: Company */}
-          <div className="space-y-6">
-            <h4 className="text-[#c4a676] font-bold uppercase tracking-widest text-xs">Company</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="hover:text-white cursor-pointer transition">Overview</li>
-              <li className="hover:text-white cursor-pointer transition">Our Team</li>
-              <li className="hover:text-white cursor-pointer transition">Projects</li>
-              <li className="hover:text-white cursor-pointer transition">Insights</li>
-            </ul>
-          </div>
-
-          {/* Column 3: Services */}
-          <div className="space-y-6">
-            <h4 className="text-[#c4a676] font-bold uppercase tracking-widest text-xs">Services</h4>
-            <ul className="space-y-4 text-sm">
-              <li className="hover:text-white cursor-pointer transition">Residential</li>
-              <li className="hover:text-white cursor-pointer transition">Commercial</li>
-              <li className="hover:text-white cursor-pointer transition">Land Development</li>
-              <li className="hover:text-white cursor-pointer transition">Looking for Dev?</li>
-            </ul>
-          </div>
-
-          {/* Column 4: Corporate Office */}
-          <div className="space-y-6">
-            <h4 className="text-[#c4a676] font-bold uppercase tracking-widest text-xs">Corporate Office</h4>
-            <div className="space-y-4 text-sm">
-              <div className="flex items-start gap-3">
-                <FaPhoneAlt className="mt-1 text-gray-500" />
-                <span>+91 9945 196777</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <FaRegEnvelope className="mt-1 text-gray-500" />
-                <span>multiversalinfra@gmail.com</span>
-              </div>
-              <div className="flex items-start gap-3 border-l border-gray-800 pl-4">
-                <span>
-                  Villa no 12, Saicity villas<br />
-                  K.Dommasandra, Kodigehalli main road<br />
-                  Behind kidzee school, Belathur road<br />
-                  Whitefield, Bangalore
-                </span>
-              </div>
+          {/* Action: WhatsApp Inquiry */}
+          <motion.button 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleWhatsApp}
+            className="group relative bg-white text-black px-8 py-4 rounded-2xl flex items-center gap-4 transition-all overflow-hidden shadow-[0_15px_35px_rgba(59,130,246,0.2)]"
+          >
+            {/* Animated Hover Background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="relative z-10 flex items-center gap-3">
+              <FaWhatsapp size={20} className="text-green-600 group-hover:text-white transition-colors" />
+              <span className="text-[10px] font-black uppercase tracking-widest group-hover:text-white">
+                Start Project Inquiry
+              </span>
             </div>
-          </div>
+            <FaArrowRight className="relative z-10 group-hover:text-white group-hover:translate-x-1 transition-all" size={12} />
+          </motion.button>
         </div>
 
-        {/* BOTTOM SECTION */}
-        <div className="border-t border-gray-900 pt-10 relative flex flex-col md:flex-row justify-between items-center gap-6">
-          
-          {/* Copyright */}
-          <p className="text-[10px] uppercase tracking-widest text-gray-600">
-            © 2015 MULTIVERSAL INFRA PVT. LTD. ALL RIGHTS RESERVED.
+        {/* BOTTOM STRIP: SOCIALS & LEGAL */}
+        <div className="flex flex-col md:flex-row justify-between items-center pt-8 gap-6">
+          <div className="flex gap-4">
+            <SocialIcon icon={<FaFacebookF />} />
+            <SocialIcon icon={<FaInstagram />} />
+          </div>
+
+          <p className="text-[8px] font-bold uppercase tracking-[0.6em] text-gray-700">
+            © 2015-2025 Multiversal Infra Pvt Ltd
           </p>
 
-          {/* ADVANCED ACTION PILL - HIGH CONTRAST VERSION */}
-          <div className="flex items-center bg-white rounded-full p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-gray-200 scale-90 md:scale-100">
-            {/* Main Action Button */}
-            <button 
-              onClick={() => window.location.href = 'mailto:multiversalinfra@gmail.com'}
-              className="bg-[#111827] text-white flex items-center gap-3 px-6 py-3.5 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all duration-300 whitespace-nowrap"
-            >
-              <FaRegEnvelope className="text-sm" /> 
-              Schedule Visit
-            </button>
-
-            {/* Icon Section (Phone & WhatsApp) */}
-            <div className="flex items-center px-5 gap-5 border-l border-gray-200 ml-2">
-                <a href="tel:+919945196777" className="group">
-                  <FaPhoneAlt 
-                    className="text-gray-400 group-hover:text-black transition-colors" 
-                    style={{ width: '16px', height: '16px', display: 'block' }} 
-                  />
-                </a>
-
-                <a href="https://wa.me/919945196777" target="_blank" rel="noreferrer" className="group">
-                  <FaWhatsapp 
-                    className="text-[#25D366] group-hover:scale-125 transition-transform" 
-                    style={{ width: '22px', height: '22px', display: 'block' }} 
-                  />
-                </a>
-            </div>
-          </div>
-
-          {/* Legal Links */}
-          <div className="flex items-center gap-6 text-[10px] uppercase tracking-widest font-bold">
-            <div className="flex items-center gap-2 hover:text-white cursor-pointer">
+          <div className="flex gap-8 text-[9px] font-black uppercase tracking-widest items-center">
+            {/* Fixed Unused Warning for FaUserAlt */}
+            <span className="flex items-center gap-2 text-blue-500 hover:text-white cursor-pointer transition-colors group">
               <FaUserAlt size={10} /> Employee Portal
-            </div>
-            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-white cursor-pointer">Terms of Service</span>
+            </span>
+            <span className="hover:text-blue-500 cursor-pointer transition-colors">Privacy</span>
+            <span className="hover:text-blue-500 cursor-pointer transition-colors">Legal</span>
           </div>
-
         </div>
+
       </div>
     </footer>
   );
 };
 
-// Reusable Social Icon Component
+// Sub-Component for High-End Social Icons
 const SocialIcon = ({ icon }) => (
-  <div className="w-10 h-10 rounded-full border border-gray-800 flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 hover:text-white transition-all cursor-pointer">
-    {icon}
-  </div>
+  <motion.div 
+    whileHover={{ y: -3, backgroundColor: 'rgba(59, 130, 246, 0.15)', borderColor: 'rgba(59, 130, 246, 0.3)' }}
+    className="w-9 h-9 rounded-xl border border-white/5 flex items-center justify-center text-gray-500 hover:text-blue-400 transition-all cursor-pointer backdrop-blur-md bg-white/5"
+  >
+    {React.cloneElement(icon, { size: 14 })}
+  </motion.div>
 );
 
 export default Footer;

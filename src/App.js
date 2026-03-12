@@ -9,7 +9,8 @@ import AboutSection from './components/AboutSection';
 import Milestones from './components/Milestones';
 import FeaturedProjects from './components/FeaturedProjects';
 import Footer from './components/Footer';
-import FloatingBar from './components/FloatingBar';
+import ContactAdvanced from './components/ContactAdvanced';
+
 import AskAIButton from './components/AskAIButton';
 import AboutPage from './components/AboutPage';
 import SalesPage from './components/SalesPage';
@@ -86,6 +87,7 @@ const App = () => {
           </section>
 
           <SalesPage/>
+          <ContactAdvanced/>
 
           <section id="contact">
             <Footer />
@@ -93,7 +95,7 @@ const App = () => {
         </>
       )}
 
-      <FloatingBar />
+      
       <AskAIButton />
 
       <button 
