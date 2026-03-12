@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Phone, MessageCircle, Calendar, ArrowRight } from 'lucide-react';
+import { Phone, MessageCircle, Calendar } from 'lucide-react';
 
 const MobileContactDock = () => {
   return (

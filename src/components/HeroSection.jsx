@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   Zap, 
   Target, 
@@ -12,7 +12,6 @@ import {
 
 const UltraAdvancedHero = () => {
   const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [isLive, setIsLive] = useState(true);
 
   // Simulate dynamic coordinate tracking for HUD feel
   useEffect(() => {
@@ -52,7 +51,7 @@ const UltraAdvancedHero = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 z-10" />
       </div>
 
-      {/* 2. LAYER: HUD TECH OVERLAY (The "Advanced" look) */}
+      {/* 2. LAYER: HUD TECH OVERLAY */}
       <div className="absolute inset-0 z-20 p-6 flex flex-col justify-between pointer-events-none text-white/40 text-[10px]">
         
         {/* Top HUD */}
@@ -65,9 +64,9 @@ const UltraAdvancedHero = () => {
             <p>REF: M-INFRA_HUD_v4.0</p>
           </div>
           <div className="text-right space-y-1">
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 text-white/80">
               <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-              <p className="text-white/80">REC • LIVE FEED</p>
+              <p>REC • LIVE FEED</p>
             </div>
             <p>DATA_STREAM: 48.2 GB/S</p>
           </div>
@@ -98,7 +97,7 @@ const UltraAdvancedHero = () => {
         <motion.div 
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-6 pb-8"
+          className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[3rem] p-6 pb-8 pointer-events-auto"
         >
           {/* Main Content Area */}
           <div className="flex justify-between items-start mb-8">
@@ -120,7 +119,7 @@ const UltraAdvancedHero = () => {
             {/* Circular Shutter Button */}
             <motion.button 
               whileTap={{ scale: 0.9, rotate: 90 }}
-              className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center relative shadow-[0_0_30px_rgba(59,130,246,0.5)] border-4 border-white/10"
+              className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center relative shadow-[0_0_30px_rgba(59,130,246,0.5)] border-4 border-white/10 transition-shadow"
             >
               <div className="absolute inset-0 rounded-full border border-white/30 animate-ping" />
               <ArrowUpRight size={32} className="text-white" />
@@ -154,8 +153,8 @@ const UltraAdvancedHero = () => {
         </motion.div>
       </div>
 
-      {/* CSS For Custom Animations */}
-      <style jsx>{`
+      {/* Global CSS for the rotation animation */}
+      <style dangerouslySetInnerHTML={{ __html: `
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
@@ -163,7 +162,7 @@ const UltraAdvancedHero = () => {
         .animate-spin-slow {
           animation: spin-slow 12s linear infinite;
         }
-      `}</style>
+      `}} />
     </div>
   );
 };
